@@ -39,7 +39,7 @@ export default function ChatPanel({
   }
 
   return (
-    <div className="absolute inset-y-0 right-0 z-20 flex w-full max-w-md flex-col bg-zinc-950 text-zinc-100 shadow-2xl border-l border-zinc-800/60">
+    <div className="chat-panel-enter absolute inset-y-0 right-0 z-20 flex w-full max-w-md flex-col bg-zinc-950 text-zinc-100 shadow-2xl border-l border-zinc-800/60">
       <header className="flex items-center justify-between px-5 py-4 border-b border-zinc-800/60">
         <div className="flex items-center gap-3">
           <div className="h-2.5 w-2.5 rounded-full bg-emerald-400" />

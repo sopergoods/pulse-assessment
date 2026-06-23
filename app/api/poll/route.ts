@@ -25,10 +25,10 @@ export async function GET(request: NextRequest) {
   const staleCutoff = new Date(now - STALE_MS);
   const signalCutoff = new Date(now - SIGNAL_TTL_MS);
 
-  await prisma.presence.update({
-    where: { id },
-    data: { lastSeen: new Date(now) },
-  });
+ await prisma.presence.updateMany({
+  where: { id },
+  data: { lastSeen: new Date(now) },
+});
 
   await prisma.presence.deleteMany({ where: { lastSeen: { lt: staleCutoff } } });
   await prisma.signal.deleteMany({ where: { createdAt: { lt: signalCutoff } } });

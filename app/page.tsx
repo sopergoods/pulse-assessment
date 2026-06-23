@@ -32,9 +32,7 @@ export default function Home() {
   const [notice, setNotice] = useState<string | null>(null);
   const [localStream, setLocalStream] = useState<MediaStream | null>(null);
   const [remoteStream, setRemoteStream] = useState<MediaStream | null>(null);
-  const [myLocation, setMyLocation] = useState<{ lat: number; lng: number } | null>(
-    null,
-  );
+  const [myLocation, setMyLocation] = useState<{ lat: number; lng: number } | null>(null);
 
   const [conn, _setConn] = useState<Conn>({ kind: "idle" });
   const connRef = useRef<Conn>(conn);
@@ -327,17 +325,18 @@ export default function Home() {
       />
 
       {notice && (
-        <div className="absolute left-1/2 top-20 z-30 -translate-x-1/2 rounded-full bg-zinc-800/90 px-4 py-2 text-sm text-zinc-100 shadow-lg backdrop-blur">
+        <div className="animate-fade-in absolute left-1/2 top-6 z-30 -translate-x-1/2 rounded-full bg-zinc-800/95 px-5 py-2 text-sm text-zinc-100 shadow-xl backdrop-blur border border-zinc-700/50">
           {notice}
         </div>
       )}
 
       {conn.kind === "requesting" && (
-        <div className="absolute left-1/2 top-20 z-30 flex -translate-x-1/2 items-center gap-3 rounded-full bg-zinc-800/90 px-4 py-2 text-sm text-zinc-100 shadow-lg backdrop-blur">
-          <span>Requesting connection…</span>
+        <div className="animate-fade-in absolute left-1/2 top-6 z-30 flex -translate-x-1/2 items-center gap-3 rounded-full bg-zinc-800/95 px-5 py-2 text-sm text-zinc-100 shadow-xl backdrop-blur border border-zinc-700/50">
+          <span className="h-1.5 w-1.5 rounded-full bg-yellow-400 animate-pulse" />
+          <span>Connecting...</span>
           <button
             onClick={cancelRequest}
-            className="rounded-full bg-zinc-700 px-3 py-1 text-xs hover:bg-zinc-600"
+            className="rounded-full bg-zinc-700 px-3 py-1 text-xs hover:bg-zinc-600 transition"
           >
             Cancel
           </button>
@@ -369,11 +368,10 @@ export default function Home() {
       )}
 
       {video === "requesting" && (
-        <div className="absolute bottom-24 left-1/2 z-30 -translate-x-1/2 rounded-full bg-zinc-800/90 px-4 py-2 text-sm text-zinc-100 shadow-lg backdrop-blur">
-          Waiting for stranger to accept video…
+        <div className="animate-fade-in absolute bottom-24 left-1/2 z-30 -translate-x-1/2 rounded-full bg-zinc-800/95 px-5 py-2 text-sm text-zinc-100 shadow-xl backdrop-blur border border-zinc-700/50">
+          Waiting for stranger to accept video...
         </div>
       )}
-
 
       {video === "incoming" && (
         <ConnectionPrompt
@@ -393,18 +391,19 @@ export default function Home() {
           onEnd={endVideo}
         />
       )}
-      {!inChat && (
-  <button
-    onClick={() => setShowAiChat((v) => !v)}
-    className="absolute bottom-4 right-4 z-20 rounded-full bg-purple-400 px-4 py-2.5 text-sm font-semibold text-zinc-950 hover:bg-purple-300 transition shadow-lg"
-  >
-    {showAiChat ? "Close AI Chat" : "Chat with AI Stranger"}
-  </button>
-)}
 
-{showAiChat && !inChat && (
-  <AiChatPanel onClose={() => setShowAiChat(false)} />
-)}
+      {!inChat && (
+        <button
+          onClick={() => setShowAiChat((v) => !v)}
+          className="absolute bottom-4 right-4 z-20 rounded-full bg-purple-500 px-5 py-2.5 text-sm font-semibold text-white hover:bg-purple-400 transition shadow-lg shadow-purple-900/40 border border-purple-400/30"
+        >
+          {showAiChat ? "Close AI Chat" : "Chat with AI Stranger"}
+        </button>
+      )}
+
+      {showAiChat && !inChat && (
+        <AiChatPanel onClose={() => setShowAiChat(false)} />
+      )}
     </main>
   );
 }
