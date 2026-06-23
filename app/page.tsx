@@ -10,6 +10,7 @@ import { join, leave, poll, sendSignal } from "@/lib/api";
 import { PeerSession, type DescType, type PeerControl } from "@/lib/webrtc";
 import { POLL_INTERVAL_MS } from "@/lib/presence";
 import { type PeerDot, type SignalMsg } from "@/lib/types";
+import AiChatPanel from "./components/AiChatPanel";
 
 type Conn =
   | { kind: "idle" }
@@ -25,6 +26,7 @@ const REQUEST_TIMEOUT_MS = 30_000;
 export default function Home() {
   const [phase, setPhase] = useState<"gate" | "live">("gate");
   const [sessionId] = useState(() => crypto.randomUUID());
+  const [showAiChat, setShowAiChat] = useState(false);
   const [peers, setPeers] = useState<PeerDot[]>([]);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [notice, setNotice] = useState<string | null>(null);
@@ -371,7 +373,7 @@ export default function Home() {
           Waiting for stranger to accept video…
         </div>
       )}
-      
+
 
       {video === "incoming" && (
         <ConnectionPrompt
@@ -391,6 +393,18 @@ export default function Home() {
           onEnd={endVideo}
         />
       )}
+      {!inChat && (
+  <button
+    onClick={() => setShowAiChat((v) => !v)}
+    className="absolute bottom-4 right-4 z-20 rounded-full bg-purple-400 px-4 py-2.5 text-sm font-semibold text-zinc-950 hover:bg-purple-300 transition shadow-lg"
+  >
+    {showAiChat ? "Close AI Chat" : "Chat with AI Stranger"}
+  </button>
+)}
+
+{showAiChat && !inChat && (
+  <AiChatPanel onClose={() => setShowAiChat(false)} />
+)}
     </main>
   );
 }
