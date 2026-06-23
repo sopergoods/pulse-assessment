@@ -27,33 +27,31 @@ export default function VideoPanel({
   }, [remoteStream]);
 
   return (
-    <div className="absolute inset-0 z-30 flex flex-col bg-black">
+    <div className="absolute inset-0 z-30 flex flex-col bg-zinc-950">
       <div className="relative flex-1">
-        {/* Remote (full screen) */}
         <video
           ref={remoteRef}
           autoPlay
           playsInline
-          className="h-full w-full bg-zinc-900 object-cover"
+          className="h-full w-full object-cover"
         />
         {!remoteStream && (
-          <div className="absolute inset-0 flex items-center justify-center text-zinc-500">
-            Waiting for stranger&rsquo;s video…
+          <div className="absolute inset-0 flex items-center justify-center text-sm text-zinc-600">
+            Waiting for stranger's video...
           </div>
         )}
-        {/* Local (picture-in-picture) */}
         <video
           ref={localRef}
           autoPlay
           playsInline
           muted
-          className="absolute bottom-4 right-4 h-40 w-28 rounded-lg border border-zinc-700 bg-zinc-800 object-cover"
+          className="absolute bottom-4 right-4 h-36 w-24 rounded-xl border border-zinc-700 bg-zinc-900 object-cover shadow-xl"
         />
       </div>
-      <div className="flex justify-center bg-zinc-950 p-4">
+      <div className="flex justify-center bg-zinc-950 border-t border-zinc-800/60 p-4">
         <button
           onClick={onEnd}
-          className="rounded-full bg-red-500 px-8 py-3 font-semibold text-white hover:bg-red-400"
+          className="rounded-full bg-red-500 px-10 py-3 text-sm font-semibold text-white hover:bg-red-400 transition"
         >
           End video
         </button>
