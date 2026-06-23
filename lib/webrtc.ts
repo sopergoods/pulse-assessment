@@ -128,9 +128,9 @@ export class PeerSession {
     }
   }
 
-  sendChat(text: string) {
-    this.safeSend({ t: "msg", text });
-  }
+ sendChat(text: string) {
+  this.safeSend({ t: "chat", text });
+}
 
   sendControl(ctrl: PeerControl) {
     this.safeSend({ t: "ctrl", ctrl });
