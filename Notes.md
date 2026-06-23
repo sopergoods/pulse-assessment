@@ -28,3 +28,7 @@ Phase 4 — Make it Better
 Built an AI Stranger chat feature using the Anthropic Claude API. When you're on the map alone or just want to try the app, you can click "Chat with AI Stranger" and talk to an AI that acts like an anonymous stranger. It stays in character — brief, curious, human-feeling. The button disappears when you're in a real connection so it never gets in the way.
 
 Known blocker: the feature requires Anthropic API credits. The code and route are fully built and will work once credits are available. With more time I'd add a typing indicator, personality options for the AI, and better error handling when credits run out.
+
+## Known Limitations
+
+- WebRTC peer connections may fail between devices on strict NAT networks (e.g. home routers). The original repo only included a STUN server. A TURN server would be needed for production reliability. This was added as a best-effort fix but full relay support requires a paid TURN service.
