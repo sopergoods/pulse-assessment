@@ -81,6 +81,12 @@ export async function POST(request: NextRequest) {
       where: { id: { in: [fromId, toId] } },
       data: { busy: false },
     });
+    } else if (signalType === "end") {
+  await prisma.presence.updateMany({
+    where: { id: { in: [fromId, toId] } },
+    data: { busy: false },
+  });
+}
   }
 
   await prisma.signal.create({
