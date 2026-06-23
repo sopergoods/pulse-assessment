@@ -371,6 +371,7 @@ export default function Home() {
           Waiting for stranger to accept video…
         </div>
       )}
+      
 
       {video === "incoming" && (
         <ConnectionPrompt

@@ -6,33 +6,33 @@ import type { PollResponse } from "@/lib/types";
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-// GET /api/poll?id= — the single endpoint that drives the live map.
-// It (1) heartbeats the caller, (2) reaps stale presence + orphan signals,
-// (3) returns the filtered online peers, and (4) drains this user's mailbox.
 export async function GET(request: NextRequest) {
   const params = request.nextUrl.searchParams;
   const id = params.get("id");
 
-  if (!id) {
-    return Response.json({ error: "missing id" }, { status: 400 });
+  if (!id || id.length < 8 || id.length > 64) {
+    return Response.json({ error: "invalid id" }, { status: 400 });
+  }
+
+  const { getRateLimiter } = await import("@/lib/ratelimit");
+  const limiter = getRateLimiter(id);
+  const allowed = await limiter.tryRemoveTokens(1);
+  if (!allowed) {
+    return Response.json({ error: "too many requests" }, { status: 429 });
   }
 
   const now = Date.now();
   const staleCutoff = new Date(now - STALE_MS);
   const signalCutoff = new Date(now - SIGNAL_TTL_MS);
 
-  // 1) Heartbeat — refresh lastSeen for the caller.
- await prisma.presence.update({
-  where: { id },
-  data: { lastSeen: new Date(now) },
-});
+  await prisma.presence.update({
+    where: { id },
+    data: { lastSeen: new Date(now) },
+  });
 
-  // 2) Reap stale presence rows and orphaned signals (independent deletes —
-  // no atomicity needed, and avoids transactions over a PgBouncer pooler).
   await prisma.presence.deleteMany({ where: { lastSeen: { lt: staleCutoff } } });
   await prisma.signal.deleteMany({ where: { createdAt: { lt: signalCutoff } } });
 
-  // 3) Online peers, excluding self.
   const peers = await prisma.presence.findMany({
     where: {
       id: { not: id },
@@ -41,8 +41,6 @@ export async function GET(request: NextRequest) {
     select: { id: true, lat: true, lng: true, busy: true },
   });
 
-  // 4) Drain this user's mailbox: read, then delete exactly what we read so a
-  // concurrently-inserted signal is never lost.
   const inbox = await prisma.signal.findMany({
     where: { toId: id },
     orderBy: { createdAt: "asc" },
