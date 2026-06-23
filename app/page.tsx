@@ -392,10 +392,10 @@ export default function Home() {
         />
       )}
 
-      {!inChat && (
+     {!inChat && (
         <button
           onClick={() => setShowAiChat((v) => !v)}
-          className="absolute bottom-4 right-4 z-20 rounded-full bg-purple-500 px-5 py-2.5 text-sm font-semibold text-white hover:bg-purple-400 transition shadow-lg shadow-purple-900/40 border border-purple-400/30"
+          className="ai-btn absolute bottom-4 right-4 z-20 rounded-full px-5 py-2.5 text-sm font-semibold text-white transition-all duration-300 hover:scale-105 shadow-xl border border-purple-400/30"
         >
           {showAiChat ? "Close AI Chat" : "Chat with AI Stranger"}
         </button>
