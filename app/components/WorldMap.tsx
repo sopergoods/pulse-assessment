@@ -85,10 +85,33 @@ export default function WorldMap({
       if (cancelled) return;
       if (!meMarkerRef.current) {
         const el = document.createElement("div");
-        el.className = "pulse-me";
+        el.style.position = "relative";
+        el.style.width = "14px";
+        el.style.height = "14px";
+        el.style.borderRadius = "9999px";
+        el.style.background = "#34d399";
+        el.style.border = "2.5px solid white";
+        el.style.boxShadow = "0 0 10px rgba(52, 211, 153, 0.9), 0 0 20px rgba(52, 211, 153, 0.4)";
         el.title = "You are here";
-        el.innerHTML = `<span class="pulse-me-label">Me</span>📍`;
-        meMarkerRef.current = new mapboxgl.Marker({ element: el, anchor: "bottom" })
+
+        const label = document.createElement("span");
+        label.textContent = "Me";
+        label.style.position = "absolute";
+        label.style.bottom = "100%";
+        label.style.left = "50%";
+        label.style.transform = "translateX(-50%)";
+        label.style.marginBottom = "4px";
+        label.style.fontSize = "10px";
+        label.style.fontWeight = "800";
+        label.style.color = "#ffffff";
+        label.style.background = "rgba(0,0,0,0.75)";
+        label.style.padding = "2px 7px";
+        label.style.borderRadius = "9999px";
+        label.style.whiteSpace = "nowrap";
+        label.style.letterSpacing = "0.08em";
+        el.appendChild(label);
+
+        meMarkerRef.current = new mapboxgl.Marker({ element: el, anchor: "center" })
           .setLngLat([me.lng, me.lat])
           .addTo(map);
       } else {
@@ -122,7 +145,7 @@ export default function WorldMap({
             e.stopPropagation();
             if (canConnectRef.current) onPeerClickRef.current(peer.id);
           });
-          marker = new mapboxgl.Marker({ element: el })
+          marker = new mapboxgl.Marker({ element: el, anchor: "center" })
             .setLngLat([peer.lng, peer.lat])
             .addTo(map);
           markers.set(peer.id, marker);
